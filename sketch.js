@@ -6,13 +6,13 @@ let isRotating = true;
 let saturnRingsTexture;
 let data;
 let url = "Solar System data.csv";
-let planetSizes = [];
 let expandedPlanet = -1;
 let planetVisible = [];
 let planetInfoDiv; // Div element for displaying planet information
 let typewriterSpeed = -1; // Typing speed in milliseconds
 let typewriterIndex = 10;
 let planetInfoText = "";
+let typewriterTimeout; // Declare typewriterTimeout as a global variable
 
 function preload() {
   // Load planet textures
@@ -39,15 +39,13 @@ function setup() {
   for (let i = 0; i < numPlanets; i++) {
     let angle = (TWO_PI / numPlanets) * i;
     planetAngles.push(angle);
-    planetSizes.push(70);
     planetVisible.push(true);
-  }
-
   // Create a div element for displaying planet information
   planetInfoDiv = createDiv('');
   planetInfoDiv.position(width / 2 + 20, 270);
   planetInfoDiv.style('color', 'white');
   planetInfoDiv.style('font-size', '16px');
+}
 }
 
 function draw() {
@@ -74,14 +72,14 @@ function draw() {
         sphere(500, 500, 500);
       } else if (i === 6) {
         texture(planetTextures[i]);
-        sphere(planetSizes[i]);
+        sphere(70,70,70);
         texture(saturnRingsTexture);
         rotateX(PI / 2 + radians(20));
         scale(1, 1, 0.1);
         torus(120, 35, 48, 10);
       } else {
         texture(planetTextures[i]);
-        sphere(planetSizes[i]);
+        sphere(70,70,70);
       }
       pop();
     }
@@ -136,7 +134,6 @@ function getClickedPlanet(x, y) {
       }
     }
   }
-
   return closestPlanet;
 }
 
@@ -185,20 +182,6 @@ function createPlanetInfoText(planetData) {
   return planetInfoHTML;
 }
 
-
-function keyReleased() {
-  if (keyCode === 27) {
-    for (let i = 0; i < numPlanets; i++) {
-      planetVisible[i] = true;
-    }
-    expandedPlanet = -1;
-    planetInfoDiv.html(""); // Clear the displayed planet information
-    clearTimeout(typewriterTimeout); // Stop the typewriter effect
-  }
-}
-
-let typewriterTimeout; // Declare typewriterTimeout as a global variable
-
 function displayPlanetInfo(planetName) {
   planetName = planetName.toLowerCase().trim();
 
@@ -226,3 +209,16 @@ function displayPlanetInfo(planetName) {
     typeWriter();
   }
 }
+
+function keyReleased() {
+  if (keyCode === 27) {
+    for (let i = 0; i < numPlanets; i++) {
+      planetVisible[i] = true;
+    }
+    expandedPlanet = -1;
+    planetInfoDiv.html(""); // Clear the displayed planet information
+    clearTimeout(typewriterTimeout); // Stop the typewriter effect
+  }
+}
+
+
